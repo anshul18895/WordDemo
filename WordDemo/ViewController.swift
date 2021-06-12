@@ -13,8 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var lettersStackView: UIStackView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var timeLabel  : UILabel!
+    @IBOutlet weak var scoreLabel : UILabel!
+    @IBOutlet weak var levelLabel : UILabel!
     
     
     var textFields     : [UITextField] = []
@@ -24,11 +25,18 @@ class ViewController: UIViewController {
     var timer: Timer?
     var seconds = 60
     
+    var lavelNumber: Int = 1{
+        didSet{
+            self.levelLabel.text = "Level \(lavelNumber)"
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        self.lavelNumber = 1
         
         if let first = GameManager.shared.getNextLevel(){
             self.setup(first)
@@ -100,6 +108,7 @@ class ViewController: UIViewController {
                 GameManager.shared.score += (seconds)
                 self.scoreLabel.text = "\(GameManager.shared.score) Points"
                 self.setup(level)
+                self.lavelNumber += 1
             }else{
                 timer?.invalidate()
                 let alert = UIAlertController.init(title: "Wow", message: "You have completed all the levels, your score is \(GameManager.shared.score)", preferredStyle: .alert)
